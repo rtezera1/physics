@@ -74,3 +74,101 @@ var boxSd = new b2BodyDef();
   //6
   return world.CreateBody(boxBd)
 } 
+
+var ballSd = new b2CircleDef ();
+    ballSd.density = 0.1;
+    ballSd.radius = 12;
+    ballSd.restitution = 0.5; // restituion - how the ball will lose, or gain force
+    ballSd.friction = 1;
+    ballSd.userData = 'player';
+    var ballBd = new b2BodyDef();
+    ballBd.linearDamping = .03; // used to reduce the velocity of the body
+    ballBd.allowSleep = false;
+    ballBd.AddShape(ballSd);
+    ballBd.position.Set(20,0);
+    player.object = world.CreateBody(ballBd);
+ // instruct the box2World to perform physics simulaton
+ // cleared canvas screen and draw again
+
+  function step() {
+    var stepping = false;
+    var timeStep = 1.0/60;
+    var iteration = 1;
+    // 1
+    handleInteractions();
+
+    world.Step(timeStep, iteration);
+    // 2
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    drawWorld(world, ctx);
+    // 3
+    setTimeout('step()', 10);
+  }
+
+function handleInteractions(){
+    // up arrow
+    // 1
+    var collision = world.m_contactList;
+    player.canJump = false;
+    if (collision != null){
+        if (collision.GetShape1().GetUserData() == 'player' || collision.GetShape2().GetUserData() == 'player'){
+            if ((collision.GetShape1().GetUserData() == 'ground' || collision.GetShape2().GetUserData() == 'ground')){
+                var playerObj = (collision.GetShape1().GetUserData() == 'player' ? collision.GetShape1().GetPosition() :  collision.GetShape2().GetPosition());
+                var groundObj = (collision.GetShape1().GetUserData() == 'ground' ? collision.GetShape1().GetPosition() :  collision.GetShape2().GetPosition());
+                if (playerObj.y < groundObj.y){
+                    player.canJump = true;
+                }
+            }
+        }
+    }
+    // 2
+    var vel = player.object.GetLinearVelocity();
+
+    if (player.object.GetCenterPosition().y > canvasHeight) {
+      player.object.SetCenterPosition(new b2Vec2(20, 0), 0)
+
+    }
+    else if (player.object.GetCenterPosition().x > canvasWidth-50) {
+      showWin();
+      return;
+    }
+
+    function showWin() {
+      ctx.fillStyle = '#000';
+      ctx.font = '30px verdana';
+      ctx.textBaseline = 'top';
+      ctx.fillText('thank you', )
+    }
+    // 3
+    if (keys[38] && player.canJump){
+        vel.y = -150;  
+    }
+     
+    // 4
+    // left/right arrows
+    if (keys[37]){
+        vel.x = -60;
+    }
+    else if (keys[39]){
+        vel.x = 60;
+    }
+     
+    // 5
+    player.object.SetLinearVelocity(vel);
+}
+
+
+
+  function handleKeyDown(evt) {
+    keys[evt.keyCode] = true;
+  }
+
+  function handleKeyUp(evt){
+    keys[evt.keyCode] = false;
+  }
+
+  // disable vertical scrolling from arrows 
+  // handlKeydown and up setup an array that tracks every key that user types
+  document.onkeydown=function(){ return event.keyCode != 38 && event.keyCode != 40}
+
+

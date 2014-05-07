@@ -1,3 +1,5 @@
+// draws our world into the canvas, using the graphics API provided by HTML5
+
 function drawWorld(world, context) {
     for (var j = world.m_jointList; j; j = j.m_next) {
         drawJoint(j, context);
@@ -8,6 +10,8 @@ function drawWorld(world, context) {
         }
     }
 }
+
+// draw all the joints 
 function drawJoint(joint, context) {
     var b1 = joint.m_body1;
     var b2 = joint.m_body2;
@@ -46,6 +50,8 @@ function drawJoint(joint, context) {
     }
     context.stroke();
 }
+// draw all the bodies 
+
 function drawShape(shape, context) {
     context.strokeStyle = '#000000';
     context.beginPath();
