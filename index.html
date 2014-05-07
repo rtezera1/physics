@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Pong</title>
+    <title>Physics</title>
     
     <style>/* Removes Mobile Highlight */ *{-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}</style>
 
@@ -74,8 +74,24 @@
        <script src='js/box2d/dynamics/joints/b2RevoluteJointDef.js'></script>
        <script src='js/box2dutils.js'></script>
        <script src='js/game.js'></script>
+       <style type='text/css' media='screen'  rel='stylesheet'>
+         .center {
+            width:600px;
+            margin:0px auto;
+            display:block;
+         }
+
+         h1 {
+            text-align: center;
+         }
+
+         .center {
+            clear:both;
+            padding:10px;
+         }
+      </style>
  </head>
-  <body onload="Main();">
+  <body>
     <canvas id="game" width="600" height="400"></canvas>
   </body>
 </html>
